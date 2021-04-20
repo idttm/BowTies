@@ -24,17 +24,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var rateButton: UIButton!
     
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+       
         let appDelegate =
             UIApplication.shared.delegate as? AppDelegate
         managedContext = appDelegate?.persistentContainer.viewContext
-        
-        //1
+ 
         insertSampleData()
         
         let request: NSFetchRequest<BowTie> = BowTie.fetchRequest()
@@ -44,36 +40,24 @@ class ViewController: UIViewController {
             argumentArray: [#keyPath(BowTie.searchKey), firstTitle])
         
         do {
-            //3
             let results = try managedContext.fetch(request)
-            
-            //4
             if let tie = results.first {
-                 
-                
                 currentBowTie = tie
                 populate(bowtie: tie)
-                print(tie)
                 }
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
-    
-    
-    // Do any additional setup after loading the view.
-    
-    
-    
+  
     func insertSampleData() {
         
         let fetch: NSFetchRequest<BowTie> = BowTie.fetchRequest()
         fetch.predicate = NSPredicate(format: "searchKey != nil")
-        
+       
         let tieCount = (try? managedContext.count(for: fetch)) ?? 0
         
         if tieCount > 0 {
-            print("SampleData.plist data already in Core Data")
             // SampleData.plist data already in Core Data
             return
         }
@@ -101,11 +85,7 @@ class ViewController: UIViewController {
             let image = UIImage(named: imageName!)
             bowtie.photoData = image?.pngData()
             bowtie.lastWorn = btDict["lastWorn"] as? Date
-            
-            
-            
-            
-            
+
             let timesNumber = btDict["timesWorn"] as! NSNumber
             bowtie.timesWorn = timesNumber.int32Value
             bowtie.isFavorite = btDict["isFavorite"] as! Bool
@@ -114,15 +94,36 @@ class ViewController: UIViewController {
         try? managedContext.save()
     }
     
-    
-  
+    func populate(bowtie: BowTie) {
+        
+      guard let imageData = bowtie.photoData as Data?,
+        let lastWorn = bowtie.lastWorn as Date?,
+        let tintColor = bowtie.tintColor else {
+          return
+      }
+      
+      imageView.image = UIImage(data: imageData)
+      nameLabel.text = bowtie.name
+      ratingLabel.text = "Rating: \(bowtie.rating)/5"
+      
+      timesWornLabel.text = "# times worn: \(bowtie.timesWorn)"
+      
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateStyle = .short
+      dateFormatter.timeStyle = .none
+      
+      lastWornLabel.text = "Last worn: " + dateFormatter.string(from: lastWorn)
+      
+      favoriteLabel.isHidden = !bowtie.isFavorite
+      view.tintColor = tintColor
+    }
+   
     func update(rating: String?) {
 
         guard let ratingString = rating,
               let rating = Double(ratingString) else {
             return
         }
-
         do {
             currentBowTie.rating = rating
             try managedContext.save()
@@ -133,14 +134,26 @@ class ViewController: UIViewController {
     }
     
     
-    
-    
-    
-    
-    
-    
     // MARK: - IBActions
     @IBAction func segmentedControl(_ sender: UISegmentedControl) {
+        guard let selectedValue = sender.titleForSegment(
+            at: sender.selectedSegmentIndex) else {
+              return
+          }
+
+          let request: NSFetchRequest<BowTie> = BowTie.fetchRequest()
+          request.predicate = NSPredicate(
+            format: "%K = %@",
+            argumentArray: [#keyPath(BowTie.searchKey), selectedValue])
+
+          do {
+            let results = try managedContext.fetch(request)
+            currentBowTie = results.first
+            populate(bowtie: currentBowTie)
+            print(currentBowTie)
+          } catch let error as NSError {
+            print("Could not fetch \(error), \(error.userInfo)")
+          }
         
     }
     
@@ -152,6 +165,7 @@ class ViewController: UIViewController {
         do {
             try managedContext.save()
             populate(bowtie: currentBowTie)
+            print(currentBowTie)
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
@@ -178,41 +192,13 @@ class ViewController: UIViewController {
                 self.update(rating: textField.text)
             }
         }
-        
+        print(currentBowTie)
         alert.addAction(cancelAction)
         alert.addAction(saveAction)
         
         present(alert, animated: true)
     }
-    func populate(bowtie: BowTie) {
-      
-      guard let imageData = bowtie.photoData as Data?,
-        let lastWorn = bowtie.lastWorn as Date?,
-        let tintColor = bowtie.tintColor else {
-          return
-      }
-      
-      imageView.image = UIImage(data: imageData)
-      nameLabel.text = bowtie.name
-      ratingLabel.text = "Rating: \(bowtie.rating)/5"
-      
-      timesWornLabel.text = "# times worn: \(bowtie.timesWorn)"
-      
-      let dateFormatter = DateFormatter()
-      dateFormatter.dateStyle = .short
-      dateFormatter.timeStyle = .none
-      
-      lastWornLabel.text = "Last worn: " + dateFormatter.string(from: lastWorn)
-      
-      favoriteLabel.isHidden = !bowtie.isFavorite
-      view.tintColor = tintColor
-    }
-    
-
 }
-
-
-
 private extension UIColor {
     
     static func color(dict: [String: Any]) -> UIColor? {
