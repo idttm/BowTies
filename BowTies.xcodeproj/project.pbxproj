@@ -14,6 +14,10 @@
 		3EB07C17262EC26F009292CE /* BowTies.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07C15262EC26F009292CE /* BowTies.xcdatamodeld */; };
 		3EB07C19262EC272009292CE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EB07C18262EC272009292CE /* Assets.xcassets */; };
 		3EB07C1C262EC272009292CE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3EB07C1A262EC272009292CE /* LaunchScreen.storyboard */; };
+		3EB07C26262EC49B009292CE /* SampleData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3EB07C25262EC49B009292CE /* SampleData.plist */; };
+		3EB07C29262EC90F009292CE /* ColorAttributeTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07C28262EC90F009292CE /* ColorAttributeTransformer.swift */; };
+		3EB07C5D262F100B009292CE /* BowTie+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07C5B262F100B009292CE /* BowTie+CoreDataClass.swift */; };
+		3EB07C5E262F100B009292CE /* BowTie+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EB07C5C262F100B009292CE /* BowTie+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,10 @@
 		3EB07C18262EC272009292CE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3EB07C1B262EC272009292CE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3EB07C1D262EC272009292CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3EB07C25262EC49B009292CE /* SampleData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SampleData.plist; sourceTree = "<group>"; };
+		3EB07C28262EC90F009292CE /* ColorAttributeTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAttributeTransformer.swift; sourceTree = "<group>"; };
+		3EB07C5B262F100B009292CE /* BowTie+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BowTie+CoreDataClass.swift"; sourceTree = "<group>"; };
+		3EB07C5C262F100B009292CE /* BowTie+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BowTie+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +50,8 @@
 		3EB07C00262EC26F009292CE = {
 			isa = PBXGroup;
 			children = (
+				3EB07C5B262F100B009292CE /* BowTie+CoreDataClass.swift */,
+				3EB07C5C262F100B009292CE /* BowTie+CoreDataProperties.swift */,
 				3EB07C0B262EC26F009292CE /* BowTies */,
 				3EB07C0A262EC26F009292CE /* Products */,
 			);
@@ -61,8 +71,10 @@
 				3EB07C0C262EC26F009292CE /* AppDelegate.swift */,
 				3EB07C0E262EC26F009292CE /* SceneDelegate.swift */,
 				3EB07C10262EC26F009292CE /* ViewController.swift */,
+				3EB07C28262EC90F009292CE /* ColorAttributeTransformer.swift */,
 				3EB07C12262EC26F009292CE /* Main.storyboard */,
 				3EB07C18262EC272009292CE /* Assets.xcassets */,
+				3EB07C25262EC49B009292CE /* SampleData.plist */,
 				3EB07C1A262EC272009292CE /* LaunchScreen.storyboard */,
 				3EB07C1D262EC272009292CE /* Info.plist */,
 				3EB07C15262EC26F009292CE /* BowTies.xcdatamodeld */,
@@ -129,6 +141,7 @@
 			files = (
 				3EB07C1C262EC272009292CE /* LaunchScreen.storyboard in Resources */,
 				3EB07C19262EC272009292CE /* Assets.xcassets in Resources */,
+				3EB07C26262EC49B009292CE /* SampleData.plist in Resources */,
 				3EB07C14262EC26F009292CE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -141,9 +154,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3EB07C11262EC26F009292CE /* ViewController.swift in Sources */,
+				3EB07C5D262F100B009292CE /* BowTie+CoreDataClass.swift in Sources */,
 				3EB07C17262EC26F009292CE /* BowTies.xcdatamodeld in Sources */,
 				3EB07C0D262EC26F009292CE /* AppDelegate.swift in Sources */,
+				3EB07C5E262F100B009292CE /* BowTie+CoreDataProperties.swift in Sources */,
 				3EB07C0F262EC26F009292CE /* SceneDelegate.swift in Sources */,
+				3EB07C29262EC90F009292CE /* ColorAttributeTransformer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,7 +316,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Andrew-Cheberyako.BowTies";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -319,7 +335,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Andrew-Cheberyako.BowTies";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
