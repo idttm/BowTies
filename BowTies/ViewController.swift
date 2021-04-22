@@ -26,11 +26,11 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         let appDelegate =
             UIApplication.shared.delegate as? AppDelegate
         managedContext = appDelegate?.persistentContainer.viewContext
- 
+        
         insertSampleData()
         
         let request: NSFetchRequest<BowTie> = BowTie.fetchRequest()
@@ -41,61 +41,69 @@ class ViewController: UIViewController {
         
         do {
             let results = try managedContext.fetch(request)
+            
             if let tie = results.first {
                 currentBowTie = tie
+                print(currentBowTie)
+                print(tie)
                 populate(bowtie: tie)
-                }
+            }
+           
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
     }
-  
-    func insertSampleData() {
-        
-        let fetch: NSFetchRequest<BowTie> = BowTie.fetchRequest()
-        fetch.predicate = NSPredicate(format: "searchKey != nil")
-       
-        let tieCount = (try? managedContext.count(for: fetch)) ?? 0
-        
-        if tieCount > 0 {
-            // SampleData.plist data already in Core Data
-            return
-        }
-        
-        let path = Bundle.main.path(forResource: "SampleData",
-                                    ofType: "plist")
-        let dataArray = NSArray(contentsOfFile: path!)!
-        
-        for dict in dataArray {
-            let entity = NSEntityDescription.entity(
-                forEntityName: "BowTie",
-                in: managedContext)!
-            let bowtie = BowTie(entity: entity,
-                                insertInto: managedContext)
-            let btDict = dict as! [String: Any]
-            
-            //        bowtie.id = UUID(uuidString: btDict["id"] as! String)
-            bowtie.name = btDict["name"] as? String
-            bowtie.searchKey = btDict["searchKey"] as? String
-            bowtie.rating = btDict["rating"] as! Double
-            let colorDict = btDict["tintColor"] as! [String: Any]
-            bowtie.tintColor = UIColor.color(dict: colorDict)
-            
-            let imageName = btDict["imageName"] as? String
-            let image = UIImage(named: imageName!)
-            bowtie.photoData = image?.pngData()
-            bowtie.lastWorn = btDict["lastWorn"] as? Date
 
-            let timesNumber = btDict["timesWorn"] as! NSNumber
-            bowtie.timesWorn = timesNumber.int32Value
-            bowtie.isFavorite = btDict["isFavorite"] as! Bool
-            //        bowtie.url = URL(string: btDict["url"] as! String)
-        }
-        try? managedContext.save()
+   
+    // Insert sample data
+    func insertSampleData() {
+
+      let fetch: NSFetchRequest<BowTie> = BowTie.fetchRequest()
+      fetch.predicate = NSPredicate(format: "searchKey != nil")
+
+      let tieCount = (try? managedContext.count(for: fetch)) ?? 0
+
+      if tieCount > 0 {
+        // SampleData.plist data already in Core Data
+        return
+      }
+      
+      let path = Bundle.main.path(forResource: "SampleData",
+                                  ofType: "plist")
+      let dataArray = NSArray(contentsOfFile: path!)!
+
+      for dict in dataArray {
+        let entity = NSEntityDescription.entity(
+          forEntityName: "BowTie",
+          in: managedContext)!
+        let bowtie = BowTie(entity: entity,
+                            insertInto: managedContext)
+        let btDict = dict as! [String: Any]
+
+//        bowtie.id = UUID(uuidString: btDict["id"] as! String)
+        bowtie.name = btDict["name"] as? String
+        bowtie.searchKey = btDict["searchKey"] as? String
+        bowtie.rating = btDict["rating"] as! Double
+        let colorDict = btDict["tintColor"] as! [String: Any]
+        bowtie.tintColor = UIColor.color(dict: colorDict)
+
+        let imageName = btDict["imageName"] as? String
+        let image = UIImage(named: imageName!)
+        bowtie.photoData = image?.pngData()
+        bowtie.lastWorn = btDict["lastWorn"] as? Date
+
+        let timesNumber = btDict["timesWorn"] as! NSNumber
+        bowtie.timesWorn = timesNumber.int32Value
+        bowtie.isFavorite = btDict["isFavorite"] as! Bool
+//        bowtie.url = URL(string: btDict["url"] as! String)
+      }
+      try? managedContext.save()
     }
+
+    
     
     func populate(bowtie: BowTie) {
-        
+      
       guard let imageData = bowtie.photoData as Data?,
         let lastWorn = bowtie.lastWorn as Date?,
         let tintColor = bowtie.tintColor else {
@@ -112,11 +120,13 @@ class ViewController: UIViewController {
       dateFormatter.dateStyle = .short
       dateFormatter.timeStyle = .none
       
-      lastWornLabel.text = "Last worn: " + dateFormatter.string(from: lastWorn)
+      lastWornLabel.text =
+        "Last worn: " + dateFormatter.string(from: lastWorn)
       
       favoriteLabel.isHidden = !bowtie.isFavorite
       view.tintColor = tintColor
     }
+
    
     func update(rating: String?) {
 
@@ -154,7 +164,6 @@ class ViewController: UIViewController {
           } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
           }
-        
     }
     
     @IBAction func wear(_ sender: UIButton) {
@@ -169,7 +178,6 @@ class ViewController: UIViewController {
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
-        
     }
     
     @IBAction func rate(_ sender: UIButton) {
@@ -191,13 +199,15 @@ class ViewController: UIViewController {
             if let textField = alert.textFields?.first {
                 self.update(rating: textField.text)
             }
+            print(currentBowTie)
         }
-        print(currentBowTie)
+        
         alert.addAction(cancelAction)
         alert.addAction(saveAction)
         
         present(alert, animated: true)
     }
+    
 }
 private extension UIColor {
     
